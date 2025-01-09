@@ -1,5 +1,88 @@
-# Vue 3 + Vite
+# Vue UI Demo
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+這是一個基於 Vue 3 與 Element Plus 的 UI 元件展示專案，涵蓋常見的基礎元件、表單元件、資料呈現、互動元件及範例頁面。該專案旨在提供統一風格的元件實現，適合用於企業內部管理系統的開發或作為學習 Vue 與 UI 框架的範例。
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+---
+
+## 功能模組
+
+### **基礎元件**
+- **文字樣式**：展示不同文字排版與樣式的應用。
+- **按鈕**：多種按鈕樣式與大小配置範例。
+- **版面配置**：彈性網格系統與容器配置示例。
+
+---
+
+### **表單元件**
+- **文字方塊**：單行與多行文字輸入框。
+- **選項按鈕**：單選項按鈕組的使用範例。
+- **核取方塊**：支援多選的核取方塊範例。
+- **下拉選單**：提供選項列表的下拉式選單。
+- **日期選擇**：日期、日期範圍選擇元件。
+- **檔案上傳**：拖曳與按鈕觸發的檔案上傳功能。
+
+---
+
+### **資料呈現**
+- **表格**：靈活的數據表格，包括排序、過濾、操作列等功能。
+- **分頁**：大數據集的分頁控制元件。
+- **資料列表**：支援卡片樣式、圖示與標記的列表。
+- **標記**：數字、狀態的標記元件範例。
+
+---
+
+### **互動元件**
+- **提示訊息 (Alert)**：靜態的提示框，適合顯示狀態或警告。
+- **通知訊息 (Message)**：即時的通知提示，用於操作反饋。
+- **對話視窗 (Dialog)**：彈出式視窗，支援自訂內容與按鈕操作。
+- **系統通知 (Notification)**：提供標題與內容的通知元件。
+
+---
+
+### **範例頁面**
+- **表單頁面**：表單的綜合應用範例。
+- **查詢列表**：支援篩選條件與結果呈現的查詢頁面。
+- **檔案上傳**：結合檔案上傳元件的範例頁。
+- **資料匯出**：展示資料導出 PDF 或其他格式的功能。
+
+---
+
+## 使用技術
+
+- **Vue 3**：漸進式 JavaScript 框架，適用於構建高效的前端應用。
+- **Vite**：現代化的專案構建工具，提供快速的開發與打包體驗。
+- **Element Plus**：基於 Vue 3 的 UI 元件庫，提供豐富的元件與設計樣式。
+
+---
+
+## 系統需求
+
+- **Node.js**：版本需為 `16.0.0` 或以上。
+- **npm** 或 **yarn**：用於安裝專案所需依賴。
+
+---
+
+## 安裝與運行
+
+1. **Clone專案**
+   ```bash
+   git clone https://github.com/USERNAME/VueUIDemo.git
+   ```
+2. **安裝套件**
+   ```bash
+   cd VueUIDemo
+   npm install
+   # 或者使用 yarn
+   yarn install
+   ```
+3. **啟動local開發伺服器**
+   ```bash
+   npm run dev
+   # 或者使用 yarn
+   yarn dev
+   ```
+4. **開啟瀏覽器**
+   ```bash
+   http://localhost:5173
+   ```
+
