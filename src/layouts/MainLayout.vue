@@ -114,7 +114,7 @@
             <!-- 使用者選單 -->
             <el-dropdown>
               <span class="user-info">
-                <el-avatar :size="32" src="https://avatars.githubusercontent.com/u/1?v=4" />
+                <el-avatar :size="32" src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://fdczvxmwwjwpwbeeqcth.supabase.co/storage/v1/object/public/images/0e8160ef-da7f-4041-a5ef-cf33955d2567/82aa571e-653f-4d5b-bae7-44880c7acc86.png" />
                 <span class="username">管理員</span>
               </span>
               <template #dropdown>

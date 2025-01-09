@@ -128,13 +128,13 @@
   <el-tag type="info">資訊</el-tag>
   <el-tag type="warning">警告</el-tag>
   <el-tag type="danger">危險</el-tag>
-  `.trim()
+  `
   
   const closableTagCode = `
   <el-tag v-for="tag in closableTags" :key="tag" closable @close="removeTag(tag)">
     {{ tag }}
   </el-tag>
-  `.trim()
+  `
   
   const dynamicTagCode = `
   <el-tag v-for="tag in dynamicTags" :key="tag" closable @close="removeDynamicTag(tag)">
@@ -148,12 +148,11 @@
     @blur="addTag"
   />
   <el-button v-else size="small" @click="showInput">+ 新增標籤</el-button>
-  `.trim()
+  `
   
   const sizeTagCode = `
   <el-tag size="medium">中等</el-tag>
-  <el-tag size="small">小</el-tag>
-  `.trim()
+  <el-tag size="small">小</el-tag>`
   </script>
   
   <style scoped>
@@ -224,6 +223,7 @@
   .demo-block-code code {
     font-family: Consolas, Monaco, 'Andale Mono', monospace;
   }
+  
   
   .expanded-row {
     padding: 20px;

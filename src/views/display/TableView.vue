@@ -249,7 +249,7 @@
     <el-table-column prop="phone" label="電話" width="120" />
     <el-table-column prop="address" label="地址" />
   </el-table>
-  `.trim()
+  `
   
   const stripeTableCode = `
   <el-table
@@ -288,7 +288,7 @@
     </el-table-column>
     ...
   </el-table>
-  `.trim()
+  `
   
   const expandTableCode = `
   <el-table :data="tableData">
@@ -303,7 +303,7 @@
     </el-table-column>
     ...
   </el-table>
-  `.trim()
+  `
   
   const selectTableCode = `
   <el-table
@@ -313,7 +313,7 @@
     <el-table-column type="selection" width="55" />
     ...
   </el-table>
-  `.trim()
+  `
   </script>
   
   <style scoped>
