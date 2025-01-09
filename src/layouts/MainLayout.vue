@@ -48,11 +48,10 @@
               <el-icon><Grid /></el-icon>
               <span>資料呈現</span>
             </template>
+            <el-menu-item index="/display/tag">標籤</el-menu-item>
+            <el-menu-item index="/display/badge">標記</el-menu-item>
             <el-menu-item index="/display/table">表格</el-menu-item>
             <el-menu-item index="/display/pagination">分頁</el-menu-item>
-            <!-- <el-menu-item index="/display/tag">標籤</el-menu-item> -->
-            <el-menu-item index="/display/list">資料列表</el-menu-item>
-            <el-menu-item index="/display/badge">標記</el-menu-item>
           </el-sub-menu>
 
           <!-- 互動元件 -->
@@ -73,7 +72,8 @@
               <el-icon><Document /></el-icon>
               <span>範例頁面</span>
             </template>
-            
+            <el-menu-item index="/examples/list">資料列表</el-menu-item>
+            <el-menu-item index="/examples/detail">詳細資料</el-menu-item>
             <el-menu-item index="/examples/form">表單頁面</el-menu-item>
             <el-menu-item index="/examples/search">查詢列表</el-menu-item>
             <el-menu-item index="/examples/upload">檔案上傳</el-menu-item>
@@ -102,9 +102,9 @@
         <div class="header-right">
           <el-space>
             <!-- 主題切換 -->
-            <el-button type="text">
+            <!-- <el-button type="text">
               <el-icon><Moon /></el-icon>
-            </el-button>
+            </el-button> -->
             <!-- 通知按鈕 -->
             <el-badge :value="3" class="notification-badge">
               <el-button type="text">
@@ -168,13 +168,13 @@ const currentRoute = computed(() => {
     '/form/upload': '檔案上傳',
     '/display/table': '表格',
     '/display/pagination': '分頁',
-    '/display/list': '資料列表',
     '/display/tag': '標籤',
     '/display/badge': '標記',
     '/interaction/alert': '提示訊息',
     '/interaction/message': '通知訊息',
     '/interaction/dialog': '對話視窗',
     '/interaction/notification': '系統通知',
+    '/examples/list': '資料列表',
     '/examples/form': '表單頁面',
     '/examples/search': '查詢列表',
     '/examples/upload': '檔案上傳',

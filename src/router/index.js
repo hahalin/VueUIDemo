@@ -96,12 +96,7 @@ const routes = [
             path: 'badge',
             name: 'display-badge',
             component: () => import('../views/display/BadgeView.vue')
-          },
-          {
-            path: 'list',
-            name: 'display-list',
-            component: () => import('../views/display/ListView.vue')
-          },
+          }
         ]
       },
       // 互動元件
@@ -134,6 +129,16 @@ const routes = [
       {
         path: 'examples',
         children: [
+          {
+            path: 'list',
+            name: 'examples-list',
+            component: () => import('../views/examples/ListView.vue')
+          },
+          {
+            path: 'detail',
+            name: 'examples-detail',
+            component: () => import('../views/examples/DetailView.vue')
+          },
           {
             path: 'form',
             name: 'examples-form',

@@ -76,7 +76,7 @@
           <div class="demo-block-content">
             <el-tag size="medium">中等</el-tag>
             <el-tag size="small">小</el-tag>
-            <el-tag size="mini">迷你</el-tag>
+            <!-- <el-tag size="mini">迷你</el-tag> -->
           </div>
           <div class="demo-block-code">
             <pre><code>{{ sizeTagCode }}</code></pre>
@@ -153,7 +153,6 @@
   const sizeTagCode = `
   <el-tag size="medium">中等</el-tag>
   <el-tag size="small">小</el-tag>
-  <el-tag size="mini">迷你</el-tag>
   `.trim()
   </script>
   
