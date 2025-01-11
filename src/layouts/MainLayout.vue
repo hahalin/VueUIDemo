@@ -39,6 +39,7 @@
             <el-menu-item index="/form/checkbox">核取方塊</el-menu-item>
             <el-menu-item index="/form/select">下拉選單</el-menu-item>
             <el-menu-item index="/form/date-picker">日期選擇</el-menu-item>
+            <el-menu-item index="/form/roc-date-picker">民國年日期選擇</el-menu-item>
             <el-menu-item index="/form/upload">檔案上傳</el-menu-item>
           </el-sub-menu>
 
@@ -165,6 +166,7 @@ const currentRoute = computed(() => {
     '/form/checkbox': '核取方塊',
     '/form/select': '下拉選單',
     '/form/date-picker': '日期選擇',
+    '/form/roc-date-picker': '民國年日期選擇',
     '/form/upload': '檔案上傳',
     '/display/table': '表格',
     '/display/pagination': '分頁',

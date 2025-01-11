@@ -67,6 +67,11 @@ const routes = [
             component: () => import('../views/form/DatePickerView.vue')
           },
           {
+            path: 'roc-date-picker',
+            name: 'form-roc-date-picker',
+            component: () => import('../views/form/ROCDatePickerView.vue')
+          },
+          {
             path: 'upload',
             name: 'form-upload',
             component: () => import('../views/examples/UploadView.vue')
