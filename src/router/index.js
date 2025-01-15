@@ -155,6 +155,11 @@ const routes = [
             component: () => import('../views/examples/SearchView.vue')
           },
           {
+            path: 'hospital-list',
+            name: 'examples-hospital-list',
+            component: () => import('../views/examples/HospitalList.vue')
+          },
+          {
             path: 'upload',
             name: 'examples-upload',
             component: () => import('../views/examples/UploadView.vue')
