@@ -73,11 +73,11 @@
               <el-icon><Document /></el-icon>
               <span>範例頁面</span>
             </template>
+            <el-menu-item index="/examples/hospital-list">CRUD範例</el-menu-item> 
             <el-menu-item index="/examples/list">資料列表</el-menu-item>
             <el-menu-item index="/examples/detail">詳細資料</el-menu-item>
             <el-menu-item index="/examples/form">表單頁面</el-menu-item>
             <el-menu-item index="/examples/search">查詢列表</el-menu-item>
-            <el-menu-item index="/examples/hospital-list">新刪修範例</el-menu-item> 
             <el-menu-item index="/examples/upload">檔案上傳</el-menu-item>
             <el-menu-item index="/examples/export">資料匯出</el-menu-item>
           </el-sub-menu>
@@ -180,7 +180,7 @@ const currentRoute = computed(() => {
     '/examples/list': '資料列表',
     '/examples/form': '表單頁面',
     '/examples/search': '查詢列表',
-    '/examples/hospital-list':'新刪修範例',
+    '/examples/hospital-list':'CRUD範例',
     '/examples/upload': '檔案上傳',
     '/examples/export': '資料匯出',
     '/examples/detail': '詳細資料'

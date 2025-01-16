@@ -8,17 +8,17 @@
                 </div>
             </template>
             <el-form :inline="true" :model="searchForm" class="search-form">
-                <el-form-item label="機構代號">
-                    <el-input v-model="searchForm.hospitalId" placeholder="請輸入機構代號" clearable />
-                </el-form-item>
-                <el-form-item label="機構名稱">
-                    <el-input v-model="searchForm.hospitalName" placeholder="請輸入機構名稱" clearable />
-                </el-form-item>
                 <el-form-item label="機構類別">
                     <el-select v-model="searchForm.hospitalType" placeholder="請選擇機構類別" clearable style="width: 160px">
                         <el-option v-for="type in HOSPITAL_TYPES" :key="type.value" :label="type.label"
                             :value="type.value" />
                     </el-select>
+                </el-form-item>
+                <el-form-item label="機構代號">
+                    <el-input v-model="searchForm.hospitalId" placeholder="請輸入機構代號" clearable />
+                </el-form-item>
+                <el-form-item label="機構名稱">
+                    <el-input v-model="searchForm.hospitalName" placeholder="請輸入機構名稱" clearable />
                 </el-form-item>
                 <!-- <el-form-item label="縣市">
                     <el-select v-model="searchForm.city" placeholder="請選擇縣市" clearable style="width: 160px">
@@ -42,6 +42,11 @@
                             <Plus />
                         </el-icon>新增機構
                     </el-button>
+                    <el-button type="warning" @click="showHelpDialog">
+                        <el-icon>
+                            <QuestionFilled />
+                        </el-icon>設定後端說明
+                    </el-button>
                 </el-form-item>
             </el-form>
         </el-card>
@@ -53,7 +58,7 @@
                     <span>查詢結果</span>
                 </div>
             </template>
-            <el-table :data="hospitals" v-loading="loading" style="width: 100%" border>
+            <el-table :data="pageData" v-loading="loading" style="width: 100%" border>
                 <el-table-column prop="id" label="機構代號" width="120" />
                 <el-table-column prop="name" label="機構名稱" width="200" />
                 <el-table-column prop="typeName" label="機構類別" width="120" />
@@ -76,6 +81,9 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize"
+                :page-sizes="[5, 10, 20]" :total="total" layout="total, sizes, prev, pager, next, jumper"
+                @size-change="handleSizeChange" @current-change="handleCurrentChange" />
         </el-card>
 
         <!-- 新增/編輯表單 -->
@@ -151,18 +159,63 @@
             </template>
         </el-dialog>
     </div>
+    <el-dialog v-model="helpDialogVisible" title="設定後端說明" width="50%">
+        <h3>檢查步驟</h3>
+        <ol>
+            <li>Backend專案需要啟動</li>
+            <li>於Vue專案的 src/config/apiSetting.js 設定Backend的網址與port</li>
+            <li>舉例：
+                <ul>
+                    <li>
+                        若後端執行url為 http://localhost:8080
+                    </li>
+                    <li>
+                        則設定 export const BackendUri = "http://localhost:8080/api"
+                    </li>
+                </ul>
+            </li>
+        </ol>
+        <el-row class="row-bg" justify="space-between">
+            <el-col :span="6">
+                <div class="grid-content ep-bg-purple">
+
+                </div>
+            </el-col>
+            <el-col :span="6">
+                <div class="grid-content ep-bg-purple-light">
+                    <!-- <el-button @click="helpDialogVisible = false">取消</el-button> -->
+                    <el-button type="primary" @click="helpDialogVisible = false">
+                        我知道了
+                    </el-button>
+                </div>
+            </el-col>
+            <el-col :span="6">
+                <div class="grid-content ep-bg-purple">
+
+                </div>
+            </el-col>
+        </el-row>
+
+        <!-- <template #footer>
+            <span class="dialog-footer">
+
+            </span>
+        </template> -->
+    </el-dialog>
+
 </template>
-<script setup>
-import { ref, reactive, nextTick } from 'vue'
+<script setup lang="ts">
+import { computed,ref, reactive, nextTick } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Search, Refresh, Plus, Edit, Delete, Lock } from '@element-plus/icons-vue'
+import { Search, Refresh, Plus, Edit, Delete, Lock, QuestionFilled } from '@element-plus/icons-vue'
 import { TAIWAN_CITIES } from '../../constants/cities'
 import { HOSPITAL_TYPES } from '../../constants/hospitalTypes'
+import { BackendUri } from '../../config/apiSetting'
 import axios from 'axios'
 
 // API 配置
 const api = axios.create({
-    baseURL: 'http://localhost:8080/api'
+    baseURL: BackendUri
 })
 
 // 狀態變數
@@ -170,9 +223,33 @@ const hospitals = ref([])
 const loading = ref(false)
 const submitting = ref(false)
 const dialogVisible = ref(false)
+const helpDialogVisible = ref(false)
 const dialogType = ref('create')
 const formRef = ref(null)
 
+//分頁相關初始化數值
+const currentPage = ref(1)
+const pageSize = ref(5)
+const total = ref(0)
+
+
+// 計算分頁後的數據
+const pageData = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value
+  const end = start + pageSize.value
+  return hospitals.value.slice(start, end)
+})
+
+// 處理分頁大小改變
+const handleSizeChange = (val) => {
+  pageSize.value = val
+  currentPage.value = 1 // 重置到第一頁
+}
+
+// 處理頁碼改變
+const handleCurrentChange = (val) => {
+  currentPage.value = val
+}
 // 搜尋表單
 const searchForm = reactive({
     hospitalId: '',
@@ -231,12 +308,19 @@ const handleSearch = async () => {
         )
         const { data } = await api.get('/hospital/search', { params })
         hospitals.value = data
+        total.value = hospitals.value.length
+
     } catch (error) {
         console.log(error);
         ElMessage.error('查詢失敗: ' + (error.response?.data || error.message))
     } finally {
         loading.value = false
     }
+}
+
+// show help dialog
+const showHelpDialog = () => {
+    helpDialogVisible.value = true;
 }
 
 // 重置查詢
