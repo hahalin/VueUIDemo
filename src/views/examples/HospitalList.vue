@@ -208,15 +208,16 @@
 import { computed,ref, reactive, nextTick } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search, Refresh, Plus, Edit, Delete, Lock, QuestionFilled } from '@element-plus/icons-vue'
-import { TAIWAN_CITIES } from '../../constants/cities'
 import { HOSPITAL_TYPES } from '../../constants/hospitalTypes'
-import { BackendUri } from '../../config/apiSetting'
-import axios from 'axios'
+import { hospitals, mockApi } from '../../mock/hospitalData';
+
+//import { BackendUri } from '../../config/apiSetting'
+//import axios from 'axios'
 
 // API 配置
-const api = axios.create({
-    baseURL: BackendUri
-})
+// const api = axios.create({
+//     baseURL: BackendUri
+// })
 
 // 狀態變數
 const hospitals = ref([])
@@ -299,25 +300,6 @@ const rules = {
     ]
 }
 
-// 查詢功能
-const handleSearch = async () => {
-    loading.value = true
-    try {
-        const params = Object.fromEntries(
-            Object.entries(searchForm).filter(([_, v]) => v != '')
-        )
-        const { data } = await api.get('/hospital/search', { params })
-        hospitals.value = data
-        total.value = hospitals.value.length
-
-    } catch (error) {
-        console.log(error);
-        ElMessage.error('查詢失敗: ' + (error.response?.data || error.message))
-    } finally {
-        loading.value = false
-    }
-}
-
 // show help dialog
 const showHelpDialog = () => {
     helpDialogVisible.value = true;
@@ -331,7 +313,10 @@ const resetSearch = () => {
 
 // 顯示新增對話框
 const showCreateDialog = () => {
+    
     dialogType.value = 'create'
+    dialogVisible.value = true
+
     // 重置所有表單欄位
     formData.hospitalId = ''
     formData.hospitalName = ''
@@ -344,32 +329,32 @@ const showCreateDialog = () => {
     dialogVisible.value = true
     // 使用 nextTick 確保表單已渲染後再重置驗證狀態
     nextTick(() => {
+        Object.assign(formData, {
+            hospitalId: '',
+            hospitalName: '',
+            hospitalType: '',
+            detailAddress: '',
+            phone: '',
+            ownerName: ''
+        })
+
         if (formRef.value) {
             formRef.value.resetFields()
         }
     })
 }
 
-
-
-// 顯示編輯對話框
+// 修改編輯對話框顯示邏輯
 const showEditDialog = (row) => {
     dialogType.value = 'edit'
-
-    // 尋找縣市
-    const cityMatch = TAIWAN_CITIES.find(city => row.address.startsWith(city.value))
-
-    // 尋找機構類別
-    const typeMatch = HOSPITAL_TYPES.find(type => type.label === row.typeName)
 
     // 填入表單資料
     formData.hospitalId = row.id
     formData.hospitalName = row.name
-    formData.hospitalType = typeMatch ? typeMatch.value : ''
-    formData.city = cityMatch ? cityMatch.value : ''
-    formData.detailAddress = cityMatch ? row.address.substring(cityMatch.value.length) : row.address
+    formData.hospitalType = HOSPITAL_TYPES.find(type => type.label === row.typeName)?.value || ''
+    formData.detailAddress = row.address
     formData.phone = row.phone
-    formData.ownerName = row.ownerName || '' // 確保有值
+    formData.ownerName = row.ownerName || ''
 
     dialogVisible.value = true
 
@@ -383,7 +368,25 @@ const showEditDialog = (row) => {
 
 
 
-// 提交表單
+// 改寫查詢功能
+const handleSearch = async () => {
+    loading.value = true
+    try {
+        const params = Object.fromEntries(
+            Object.entries(searchForm).filter(([_, v]) => v != '')
+        )
+        const data = await mockApi.searchHospitals(params)
+        hospitals.value = data
+        total.value = hospitals.value.length
+    } catch (error) {
+        console.log(error);
+        ElMessage.error('查詢失敗: ' + error.message)
+    } finally {
+        loading.value = false
+    }
+}
+
+// 改寫提交表單功能
 const handleSubmit = async () => {
     if (!formRef.value) return
 
@@ -393,20 +396,20 @@ const handleSubmit = async () => {
             try {
                 const submitData = {
                     ...formData,
-                    address: `${formData.city}${formData.detailAddress}` // 組合完整地址
+                    address: formData.detailAddress // 直接使用詳細地址
                 }
 
                 if (dialogType.value === 'create') {
-                    await api.post('/hospital', submitData)
+                    await mockApi.createHospital(submitData)
                     ElMessage.success('新增成功')
                 } else {
-                    await api.put(`/hospital/${submitData.hospitalId}`, submitData)
+                    await mockApi.updateHospital(submitData.hospitalId, submitData)
                     ElMessage.success('更新成功')
                 }
                 dialogVisible.value = false
                 handleSearch()
             } catch (error) {
-                ElMessage.error(error.response?.data || '操作失敗')
+                ElMessage.error(error.message || '操作失敗')
             } finally {
                 submitting.value = false
             }
@@ -414,7 +417,7 @@ const handleSubmit = async () => {
     })
 }
 
-// 刪除機構
+// 改寫刪除功能
 const handleDelete = async (row) => {
     try {
         await ElMessageBox.confirm(
@@ -423,7 +426,7 @@ const handleDelete = async (row) => {
             { type: 'warning' }
         )
 
-        await api.delete(`/hospital/${row.id}`)
+        await mockApi.deleteHospital(row.id)
         ElMessage.success('註銷成功')
         handleSearch()
     } catch (error) {
@@ -432,6 +435,7 @@ const handleDelete = async (row) => {
         }
     }
 }
+
 
 // 初始載入
 handleSearch()
