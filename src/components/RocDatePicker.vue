@@ -28,7 +28,8 @@
 
                 <div class="picker-header-label">
                     <button class="year-label" @click="showYearPicker = true">
-                        民國 {{ currentYear - 1911 }} 年
+                        民國 
+                        {{ currentYear - 1911 }} 年
                     </button>
                     <button class="month-label" @click="showMonthPicker = true">
                         {{ currentMonth }} 月
@@ -205,7 +206,9 @@ const displayDate = computed(() => {
     const year = selectedDate.value.getFullYear() - 1911
     const month = String(selectedDate.value.getMonth() + 1).padStart(2, '0')
     const date = String(selectedDate.value.getDate()).padStart(2, '0')
-    return `民國 ${year} 年 ${month} 月 ${date} 日`
+    return `${year}/${month}/${date}`
+    //return `民國 ${year} 年 ${month} 月 ${date} 日`
+
 })
 
 // 日期表格數據

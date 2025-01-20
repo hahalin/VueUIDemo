@@ -42,11 +42,13 @@
                             <Plus />
                         </el-icon>新增機構
                     </el-button>
+                    <!--
                     <el-button type="warning" @click="showHelpDialog">
                         <el-icon>
                             <QuestionFilled />
                         </el-icon>設定後端說明
                     </el-button>
+                    -->
                 </el-form-item>
             </el-form>
         </el-card>
@@ -81,9 +83,9 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize"
-                :page-sizes="[5, 10, 20]" :total="total" layout="total, sizes, prev, pager, next, jumper"
-                @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+            <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize" :page-sizes="[5, 10, 20]"
+                :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange"
+                @current-change="handleCurrentChange" />
         </el-card>
 
         <!-- 新增/編輯表單 -->
@@ -205,7 +207,7 @@
 
 </template>
 <script setup lang="ts">
-import { computed,ref, reactive, nextTick } from 'vue'
+import { computed, ref, reactive, nextTick } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search, Refresh, Plus, Edit, Delete, Lock, QuestionFilled } from '@element-plus/icons-vue'
 import { HOSPITAL_TYPES } from '../../constants/hospitalTypes'
@@ -236,20 +238,20 @@ const total = ref(0)
 
 // 計算分頁後的數據
 const pageData = computed(() => {
-  const start = (currentPage.value - 1) * pageSize.value
-  const end = start + pageSize.value
-  return hospitals.value.slice(start, end)
+    const start = (currentPage.value - 1) * pageSize.value
+    const end = start + pageSize.value
+    return hospitals.value.slice(start, end)
 })
 
 // 處理分頁大小改變
 const handleSizeChange = (val) => {
-  pageSize.value = val
-  currentPage.value = 1 // 重置到第一頁
+    pageSize.value = val
+    currentPage.value = 1 // 重置到第一頁
 }
 
 // 處理頁碼改變
 const handleCurrentChange = (val) => {
-  currentPage.value = val
+    currentPage.value = val
 }
 // 搜尋表單
 const searchForm = reactive({
@@ -313,35 +315,30 @@ const resetSearch = () => {
 
 // 顯示新增對話框
 const showCreateDialog = () => {
+    // 1. 先重置表單ref
+    if (formRef.value) {
+        formRef.value.resetFields()
+    }
     
+    // 2. 重置 formData
+    const emptyFormData = {
+        hospitalId: '',
+        hospitalName: '',
+        hospitalType: '',
+        city: '',
+        detailAddress: '',
+        phone: '',
+        ownerName: ''
+    }
+    
+    // 使用解構賦值確保響應式更新
+    Object.keys(formData).forEach(key => {
+        formData[key] = emptyFormData[key]
+    })
+    
+    // 3. 最後再設定 dialog 狀態
     dialogType.value = 'create'
     dialogVisible.value = true
-
-    // 重置所有表單欄位
-    formData.hospitalId = ''
-    formData.hospitalName = ''
-    formData.hospitalType = ''
-    formData.city = ''
-    formData.detailAddress = ''
-    formData.phone = ''
-    formData.ownerName = ''
-
-    dialogVisible.value = true
-    // 使用 nextTick 確保表單已渲染後再重置驗證狀態
-    nextTick(() => {
-        Object.assign(formData, {
-            hospitalId: '',
-            hospitalName: '',
-            hospitalType: '',
-            detailAddress: '',
-            phone: '',
-            ownerName: ''
-        })
-
-        if (formRef.value) {
-            formRef.value.resetFields()
-        }
-    })
 }
 
 // 修改編輯對話框顯示邏輯

@@ -160,6 +160,11 @@ const routes = [
             component: () => import('../views/examples/HospitalList.vue')
           },
           {
+            path: 'hospital-tab',
+            name: 'examples-hospital-tab',
+            component: () => import('../views/examples/HospitalTab.vue')
+          },
+          {
             path: 'upload',
             name: 'examples-upload',
             component: () => import('../views/examples/UploadView.vue')
