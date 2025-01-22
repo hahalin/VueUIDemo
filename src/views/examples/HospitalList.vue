@@ -63,8 +63,11 @@
             <el-table :data="pageData" v-loading="loading" style="width: 100%" border>
                 <el-table-column prop="id" label="機構代號" width="120" />
                 <el-table-column prop="name" label="機構名稱" width="200" />
-                <el-table-column prop="typeName" label="機構類別" width="120" />
-                <el-table-column prop="address" label="地址" min-width="200" show-overflow-tooltip />
+                <el-table-column prop="hospitalType" label="機構類別" width="120">
+                    <template #default="{ row }">
+                        {{ getHospitalTypeName(row.hospitalType) }}
+                    </template>
+                </el-table-column>                <el-table-column prop="address" label="地址" min-width="200" show-overflow-tooltip />
                 <el-table-column prop="phone" label="電話" width="150" />
                 <el-table-column prop="status" label="狀態" width="100">
                     <template #default="{ row }">
@@ -115,8 +118,12 @@
                     <el-col :span="12">
                         <el-form-item label="機構類別" prop="hospitalType">
                             <el-select v-model="formData.hospitalType" placeholder="請選擇機構類別" style="width: 100%">
-                                <el-option v-for="type in HOSPITAL_TYPES" :key="type.value" :label="type.label"
-                                    :value="type.value" />
+                                <el-option
+                                    v-for="type in filteredHospitalTypes"
+                                    :key="type.value"
+                                    :label="type.label"
+                                    :value="type.value"
+                                />
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -213,6 +220,8 @@ import { Search, Refresh, Plus, Edit, Delete, Lock, QuestionFilled } from '@elem
 import { HOSPITAL_TYPES } from '../../constants/hospitalTypes'
 import { hospitals, mockApi } from '../../mock/hospitalData';
 
+import { hospitalApi } from '../../api/hospital'
+
 //import { BackendUri } from '../../config/apiSetting'
 //import axios from 'axios'
 
@@ -229,6 +238,9 @@ const dialogVisible = ref(false)
 const helpDialogVisible = ref(false)
 const dialogType = ref('create')
 const formRef = ref(null)
+const filteredHospitalTypes = computed(() => {
+    return HOSPITAL_TYPES.filter(type => type.value !== '00');
+});
 
 //分頁相關初始化數值
 const currentPage = ref(1)
@@ -324,7 +336,7 @@ const showCreateDialog = () => {
     const emptyFormData = {
         hospitalId: '',
         hospitalName: '',
-        hospitalType: '',
+        hospitalType: '01',
         city: '',
         detailAddress: '',
         phone: '',
@@ -341,6 +353,12 @@ const showCreateDialog = () => {
     dialogVisible.value = true
 }
 
+const getHospitalTypeName = (typeValue) => {
+    const type = HOSPITAL_TYPES.find(t => t.value === typeValue);
+    return type ? type.label : typeValue;
+};
+
+
 // 修改編輯對話框顯示邏輯
 const showEditDialog = (row) => {
     dialogType.value = 'edit'
@@ -348,7 +366,7 @@ const showEditDialog = (row) => {
     // 填入表單資料
     formData.hospitalId = row.id
     formData.hospitalName = row.name
-    formData.hospitalType = HOSPITAL_TYPES.find(type => type.label === row.typeName)?.value || ''
+    formData.hospitalType = row.hospitalType
     formData.detailAddress = row.address
     formData.phone = row.phone
     formData.ownerName = row.ownerName || ''
@@ -366,7 +384,7 @@ const showEditDialog = (row) => {
 
 
 // 改寫查詢功能
-const handleSearch = async () => {
+const handleSearch0 = async () => {
     loading.value = true
     try {
         const params = Object.fromEntries(
@@ -383,8 +401,28 @@ const handleSearch = async () => {
     }
 }
 
+const handleSearch = async () => {
+    loading.value = true
+    try {
+        const params = {
+            hospitalId: searchForm.hospitalId,
+            hospitalName: searchForm.hospitalName,
+            hospitalType: searchForm.hospitalType
+        }
+        const data = await hospitalApi.searchHospitals(params)
+        hospitals.value = data
+        total.value = hospitals.value.length
+    } catch (error) {
+        console.error(error)
+        ElMessage.error('查詢失敗: ' + error.message)
+    } finally {
+        loading.value = false
+    }
+}
+
+
 // 改寫提交表單功能
-const handleSubmit = async () => {
+const handleSubmit0 = async () => {
     if (!formRef.value) return
 
     await formRef.value.validate(async (valid) => {
@@ -415,7 +453,7 @@ const handleSubmit = async () => {
 }
 
 // 改寫刪除功能
-const handleDelete = async (row) => {
+const handleDelete0 = async (row) => {
     try {
         await ElMessageBox.confirm(
             `確定要註銷 ${row.name} 嗎？`,
@@ -432,6 +470,64 @@ const handleDelete = async (row) => {
         }
     }
 }
+
+// 提交表單功能
+const handleSubmit = async () => {
+    if (!formRef.value) return
+
+    await formRef.value.validate(async (valid) => {
+        if (valid) {
+            submitting.value = true
+            try {
+                // 整理要提交的數據
+                const submitData = {
+                    hospitalId: formData.hospitalId,
+                    hospitalName: formData.hospitalName,
+                    hospitalType: formData.hospitalType,
+                    detailAddress: formData.detailAddress,
+                    phone: formData.phone,
+                    ownerName: formData.ownerName
+                }
+
+                if (dialogType.value === 'create') {
+                    await hospitalApi.createHospital(submitData)
+                    ElMessage.success('新增成功')
+                } else {
+                    await hospitalApi.updateHospital(submitData.hospitalId, submitData)
+                    ElMessage.success('更新成功')
+                }
+                dialogVisible.value = false
+                handleSearch() // 重新載入列表
+            } catch (error) {
+                console.error('操作失敗:', error)
+                ElMessage.error(error.response?.data || error.message || '操作失敗')
+            } finally {
+                submitting.value = false
+            }
+        }
+    })
+}
+
+// 刪除（註銷）功能
+const handleDelete = async (row) => {
+    try {
+        await ElMessageBox.confirm(
+            `確定要註銷 ${row.name} 嗎？`,
+            '確認註銷',
+            { type: 'warning' }
+        )
+
+        await hospitalApi.deleteHospital(row.id)
+        ElMessage.success('註銷成功')
+        handleSearch() // 重新載入列表
+    } catch (error) {
+        if (error !== 'cancel') {
+            console.error('註銷失敗:', error)
+            ElMessage.error(error.response?.data || error.message || '註銷失敗')
+        }
+    }
+}
+
 
 
 // 初始載入
