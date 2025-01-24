@@ -42,13 +42,13 @@
                             <Plus />
                         </el-icon>新增機構
                     </el-button>
-                    <!--
+                    
                     <el-button type="warning" @click="showHelpDialog">
                         <el-icon>
                             <QuestionFilled />
-                        </el-icon>設定後端說明
+                        </el-icon>此範例需設定後端說明
                     </el-button>
-                    -->
+                    
                 </el-form-item>
             </el-form>
         </el-card>
@@ -171,15 +171,15 @@
     <el-dialog v-model="helpDialogVisible" title="設定後端說明" width="50%">
         <h3>檢查步驟</h3>
         <ol>
-            <li>Backend專案需要啟動</li>
+            <li>第一支C#整合MongoDB專案需要啟動</li>
             <li>於Vue專案的 src/config/apiSetting.js 設定Backend的網址與port</li>
             <li>舉例：
                 <ul>
                     <li>
-                        若後端執行url為 http://localhost:8080
+                        預設後端執行url為 http://localhost:5095
                     </li>
                     <li>
-                        則設定 export const BackendUri = "http://localhost:8080/api"
+                        則設定 export const BackendUri = "http://localhost:5095/api"
                     </li>
                 </ul>
             </li>

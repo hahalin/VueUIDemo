@@ -6,20 +6,20 @@
         <span>UI Demo</span>
       </div>
       <el-scrollbar>
-        <el-menu
-          class="menu"
-          :router="true"
-          :default-active="route.path"
-        >
+        <el-menu class="menu" :router="true" :default-active="route.path">
           <el-menu-item index="/">
-            <el-icon><HomeFilled /></el-icon>
+            <el-icon>
+              <HomeFilled />
+            </el-icon>
             <span>首頁</span>
           </el-menu-item>
 
           <!-- 基礎元件 -->
           <el-sub-menu index="/basic">
             <template #title>
-              <el-icon><List /></el-icon>
+              <el-icon>
+                <List />
+              </el-icon>
               <span>基礎元件</span>
             </template>
             <el-menu-item index="/basic/text">文字樣式</el-menu-item>
@@ -31,7 +31,9 @@
           <!-- 表單元件 -->
           <el-sub-menu index="/form">
             <template #title>
-              <el-icon><Edit /></el-icon>
+              <el-icon>
+                <Edit />
+              </el-icon>
               <span>表單元件</span>
             </template>
             <el-menu-item index="/form/input">文字方塊</el-menu-item>
@@ -46,7 +48,9 @@
           <!-- 資料呈現 -->
           <el-sub-menu index="/display">
             <template #title>
-              <el-icon><Grid /></el-icon>
+              <el-icon>
+                <Grid />
+              </el-icon>
               <span>資料呈現</span>
             </template>
             <el-menu-item index="/display/tag">標籤</el-menu-item>
@@ -58,7 +62,9 @@
           <!-- 互動元件 -->
           <el-sub-menu index="/interaction">
             <template #title>
-              <el-icon><Bell /></el-icon>
+              <el-icon>
+                <Bell />
+              </el-icon>
               <span>互動元件</span>
             </template>
             <el-menu-item index="/interaction/alert">提示訊息</el-menu-item>
@@ -66,15 +72,27 @@
             <el-menu-item index="/interaction/dialog">對話視窗</el-menu-item>
             <el-menu-item index="/interaction/notification">系統通知</el-menu-item>
           </el-sub-menu>
-
+          <!-- 真實世界範例頁面 -->
+          <el-sub-menu index="/realWorldExamples">
+            <template #title>
+              <el-icon>
+                <Document />
+              </el-icon>
+              <span>真實世界範例頁面</span>
+            </template>
+            <el-menu-item index="/examples/ICMI0130">代碼資料作業</el-menu-item>
+          </el-sub-menu>
           <!-- 範例頁面 -->
           <el-sub-menu index="/examples">
             <template #title>
-              <el-icon><Document /></el-icon>
+              <el-icon>
+                <Document />
+              </el-icon>
               <span>範例頁面</span>
             </template>
-            <el-menu-item index="/examples/hospital-list">CRUD範例</el-menu-item> 
-            <el-menu-item index="/examples/hospital-tab">CRUD+Tab明細</el-menu-item> 
+            <el-menu-item index="/examples/ICMI0130">代碼資料作業</el-menu-item>
+            <el-menu-item index="/examples/hospital-list">CRUD範例</el-menu-item>
+            <el-menu-item index="/examples/hospital-tab">CRUD+Tab明細</el-menu-item>
             <el-menu-item index="/examples/list">資料列表</el-menu-item>
             <el-menu-item index="/examples/detail">詳細資料</el-menu-item>
             <el-menu-item index="/examples/form">表單頁面</el-menu-item>
@@ -90,12 +108,10 @@
     <el-container>
       <el-header class="header">
         <div class="header-left">
-          <el-button 
-            type="text" 
-            @click="toggleSidebar"
-            class="toggle-button"
-          >
-            <el-icon><Expand /></el-icon>
+          <el-button type="text" @click="toggleSidebar" class="toggle-button">
+            <el-icon>
+              <Expand />
+            </el-icon>
           </el-button>
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/' }">首頁</el-breadcrumb-item>
@@ -111,13 +127,16 @@
             <!-- 通知按鈕 -->
             <el-badge :value="3" class="notification-badge">
               <el-button type="text">
-                <el-icon><Bell /></el-icon>
+                <el-icon>
+                  <Bell />
+                </el-icon>
               </el-button>
             </el-badge>
             <!-- 使用者選單 -->
             <el-dropdown>
               <span class="user-info">
-                <el-avatar :size="32" src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://fdczvxmwwjwpwbeeqcth.supabase.co/storage/v1/object/public/images/0e8160ef-da7f-4041-a5ef-cf33955d2567/82aa571e-653f-4d5b-bae7-44880c7acc86.png" />
+                <el-avatar :size="32"
+                  src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://fdczvxmwwjwpwbeeqcth.supabase.co/storage/v1/object/public/images/0e8160ef-da7f-4041-a5ef-cf33955d2567/82aa571e-653f-4d5b-bae7-44880c7acc86.png" />
                 <span class="username">管理員</span>
               </span>
               <template #dropdown>
@@ -181,8 +200,9 @@ const currentRoute = computed(() => {
     '/examples/list': '資料列表',
     '/examples/form': '表單頁面',
     '/examples/search': '查詢列表',
-    '/examples/hospital-list':'CRUD範例',
-    '/examples/hospital-tab':'CRUD+Tab明細',
+    '/examples/ICMI0130': '代碼資料作業',
+    '/examples/hospital-list': 'CRUD範例',
+    '/examples/hospital-tab': 'CRUD+Tab明細',
     '/examples/upload': '檔案上傳',
     '/examples/export': '資料匯出',
     '/examples/detail': '詳細資料'
@@ -203,8 +223,10 @@ const toggleSidebar = () => {
 }
 
 .aside {
-  background-color: #fff;  /* 改為白色背景 */
-  border-right: 1px solid #e6e6e6;  /* 加入淺色邊框 */
+  background-color: #fff;
+  /* 改為白色背景 */
+  border-right: 1px solid #e6e6e6;
+  /* 加入淺色邊框 */
   transition: width 0.3s;
   overflow: hidden;
 }
@@ -214,11 +236,14 @@ const toggleSidebar = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #333;  /* 改為深色文字 */
+  color: #333;
+  /* 改為深色文字 */
   font-size: 20px;
   font-weight: bold;
-  border-bottom: 1px solid #e6e6e6;  /* 改為淺色邊框 */
-  background-color: #fff;  /* 改為白色背景 */
+  border-bottom: 1px solid #e6e6e6;
+  /* 改為淺色邊框 */
+  background-color: #fff;
+  /* 改為白色背景 */
 }
 
 .menu {
@@ -271,7 +296,8 @@ const toggleSidebar = () => {
 }
 
 .main {
-  background-color: #f5f7fa;  /* 改為較淺的灰色背景 */
+  background-color: #f5f7fa;
+  /* 改為較淺的灰色背景 */
   padding: 20px;
 }
 
@@ -280,17 +306,22 @@ const toggleSidebar = () => {
   border-right: none;
 }
 
-:deep(.el-menu-item), :deep(.el-sub-menu__title) {
-  color: #303133;  /* 改為深色文字 */
+:deep(.el-menu-item),
+:deep(.el-sub-menu__title) {
+  color: #303133;
+  /* 改為深色文字 */
 }
 
 :deep(.el-menu-item.is-active) {
-  background-color: #ecf5ff;  /* 改為淺藍色背景 */
+  background-color: #ecf5ff;
+  /* 改為淺藍色背景 */
   color: #409EFF;
 }
 
-:deep(.el-menu-item:hover), :deep(.el-sub-menu__title:hover) {
-  background-color: #f5f7fa;  /* 改為較淺的灰色 */
+:deep(.el-menu-item:hover),
+:deep(.el-sub-menu__title:hover) {
+  background-color: #f5f7fa;
+  /* 改為較淺的灰色 */
 }
 
 :deep(.el-sub-menu.is-active .el-sub-menu__title) {

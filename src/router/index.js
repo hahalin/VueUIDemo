@@ -155,6 +155,11 @@ const routes = [
             component: () => import('../views/examples/SearchView.vue')
           },
           {
+            path: 'ICMI0130',
+            name: 'ICMI0130',
+            component: ()=>import('../views/examples/ICMI0130.vue')
+          },
+          {
             path: 'hospital-list',
             name: 'examples-hospital-list',
             component: () => import('../views/examples/HospitalList.vue')
