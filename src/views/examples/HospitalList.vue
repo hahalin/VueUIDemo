@@ -172,6 +172,7 @@
         <h3>檢查步驟</h3>
         <ol>
             <li>第一支C#整合MongoDB專案需要啟動</li>
+            <li>記得要去OneDrive拿最新版的</li>
             <li>於Vue專案的 src/config/apiSetting.js 設定Backend的網址與port</li>
             <li>舉例：
                 <ul>

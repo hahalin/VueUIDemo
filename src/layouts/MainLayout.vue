@@ -90,7 +90,7 @@
               </el-icon>
               <span>範例頁面</span>
             </template>
-            <el-menu-item index="/examples/ICMI0130">代碼資料作業</el-menu-item>
+            <!-- <el-menu-item index="/examples/ICMI0130">代碼資料作業</el-menu-item> -->
             <el-menu-item index="/examples/hospital-list">CRUD範例</el-menu-item>
             <el-menu-item index="/examples/hospital-tab">CRUD+Tab明細</el-menu-item>
             <el-menu-item index="/examples/list">資料列表</el-menu-item>
